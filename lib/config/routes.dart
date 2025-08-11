@@ -6,7 +6,7 @@ class Routes {
   static MaterialPageRoute generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RoutesName.splshScreen:
-        return MaterialPageRoute(builder: (_) => const SplshScreen());
+        return MaterialPageRoute(builder: (_) =>  SplshScreen());
       case RoutesName.homeScreen:
         return MaterialPageRoute(builder: (_) => const HomePage());
       case RoutesName.loginScreen:
