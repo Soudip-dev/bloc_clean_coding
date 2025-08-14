@@ -23,9 +23,12 @@ class _SplshScreenState extends State<SplshScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: RoundBotton(title: "Home Page", onPress: (){
-          Navigator.pushNamed(context, RoutesName.homeScreen);
-        }),
+        child: Container(height: 250,width: 250,color: Colors.cyan,child: Center(
+          child: Text("Splash Screen"),
+        ),)
+        // RoundBotton(title: "Home Page", onPress: (){
+        //   Navigator.pushNamed(context, RoutesName.homeScreen);
+        // }),
       ),
     );
   }
