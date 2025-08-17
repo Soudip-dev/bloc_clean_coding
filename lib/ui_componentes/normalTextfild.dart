@@ -5,8 +5,18 @@ class NormalTextfild extends StatelessWidget {
   final FocusNode ? nextFocusNode;
   final String ? hintText;
   
+  final Function(dynamic)? onChanged;
+  final dynamic validator;
   
-   NormalTextfild({Key?key, required  this.commonFocusNode,  this.nextFocusNode, required this.hintText, }) : super(key: key);
+  
+  
+   NormalTextfild({Key?key, 
+   required  this.commonFocusNode,  
+   this.nextFocusNode, 
+   required this.hintText,
+    
+   required this.validator,
+   this.onChanged }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +25,12 @@ class NormalTextfild extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 focusNode: commonFocusNode,
                 onFieldSubmitted: (value){
+                  
                   FocusScope.of(context).requestFocus(nextFocusNode);
                 },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
+                validator: validator,
                 
-                },
-               onChanged: (value) {
-                 
-               },
+               onChanged: onChanged,
                decoration: InputDecoration(
                 hintText: hintText
                ),
