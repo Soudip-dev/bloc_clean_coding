@@ -27,13 +27,16 @@ class NetworkServicesApi implements Baseapiservice{
 
   @override
   Future<dynamic> postApi(data, String url) async{
+    print("from post api: $data <<<<<<>>>>>>> $url  ");
  dynamic jsonResponse;
     try{
      final response =await https.post(Uri.parse(url), body: data).timeout(const Duration(seconds: 55));
+     print("response: $response");
      jsonResponse = returnResponse(response);
+     print("jsonResponse: $jsonResponse");
      if(response.statusCode == 200){
        
-
+      print("res.statuscode : ${response.statusCode}");
      }
     }on SocketException{
         InternetException("");
@@ -80,7 +83,7 @@ class NetworkServicesApi implements Baseapiservice{
   }
 
    dynamic returnResponse(https.Response response){
-  switch (response){
+  switch (response.statusCode){
     case 200:
     dynamic responseJson = jsonDecode(response.body);
     return responseJson;

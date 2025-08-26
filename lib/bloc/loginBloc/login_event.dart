@@ -14,24 +14,47 @@ class EmailEvent extends LoginEvent {
   const EmailEvent({required this.email});
   
   @override
-  // TODO: implement props
+  
   List<Object?> get props => [email];
 }
-class EmailUnfocusEvent extends LoginEvent{
-  
-  
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 class PasswordEvent extends LoginEvent {
   final String password;
   const PasswordEvent({ required this.password});
   
   @override
-  // TODO: implement props
+  
   List<Object?> get props => [password];
 }
 
-class PasswordUnfocusEvent extends LoginEvent{}
+
+class LoginApi extends LoginEvent{
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class EmailUnfocusEvent extends LoginEvent{
   
   
-class LoginButton extends LoginEvent{}
+// }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// class PasswordUnfocusEvent extends LoginEvent{
+
+
+
+// }
+  
+  

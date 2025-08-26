@@ -4,10 +4,22 @@
    bool mailValidate=   RegExp(
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(email);
-        return mailValidate;
+        if(mailValidate){
+          return true;
+        }else{
+          return false;
+        }
+      
   }
 
-  bool isValidPassword(String password) {
-    return password.length >= 6;
+static  bool isValidPassword(String password) {
+    if (password.isEmpty) {
+      return false;
+    }else if(password.length >= 6){
+      return false;
+    }else{
+      return true;
+    }
+    
   }
 }
