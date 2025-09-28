@@ -30,13 +30,14 @@ class NetworkServicesApi implements Baseapiservice{
     print("from post api: $data <<<<<<>>>>>>> $url  ");
  dynamic jsonResponse;
     try{
-     final response =await https.post(Uri.parse(url), body: data).timeout(const Duration(seconds: 55));
-     print("response: $response");
+     final response =await https.post(Uri.parse(url), body: data, headers: {"x-api-key": "reqres-free-v1"}).timeout(const Duration(seconds: 55));
+     
      jsonResponse = returnResponse(response);
-     print("jsonResponse: $jsonResponse");
+     
      if(response.statusCode == 200){
-       
-      print("res.statuscode : ${response.statusCode}");
+      print("from status code${response.statusCode} ");
+       print("response : ${response.body}");
+      
      }
     }on SocketException{
         InternetException("");
@@ -50,7 +51,8 @@ class NetworkServicesApi implements Baseapiservice{
   Future <dynamic>putApi(data, String url) async{
      dynamic jsonResponse;
     try{
-     final response =await https.put(Uri.parse(url), body: data).timeout(const Duration(seconds: 55));
+     final response =await https.put(Uri.parse(url), body: data, headers: {"x-api-key": "reqres-free-v1"}).timeout(const Duration(seconds: 55));
+     
      jsonResponse = returnResponse(response);
      if(response.statusCode == 200){
        

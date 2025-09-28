@@ -2,8 +2,13 @@
 
 
 import 'package:bloc_clean_coding/bloc/loginBloc/login_bloc.dart';
+import 'package:bloc_clean_coding/config/routes_name.dart';
+import 'package:bloc_clean_coding/main.dart';
+import 'package:bloc_clean_coding/repository/auth/login_repository.dart';
 import 'package:bloc_clean_coding/utils/enums.dart';
+import 'package:bloc_clean_coding/utils/flash_bar_helper.dart';
 import 'package:bloc_clean_coding/utils/validations.dart';
+import 'package:bloc_clean_coding/views/view.dart';
 
 import 'package:flutter/material.dart';
 import 'package:bloc_clean_coding/ui_componentes/formWidget.dart';
@@ -27,7 +32,7 @@ late LoginBloc _loginBloc;
 bool obscureText = true;
 void cleanContrller(){
   
-  emailController.clear();
+   emailController.clear();
   passController.clear();
   dispose();
 }
@@ -37,7 +42,7 @@ void cleanContrller(){
 @override
   void initState() {
     
-      _loginBloc = LoginBloc();
+      _loginBloc = LoginBloc(loginRepository: getIt() );
       
 
     super.initState();
@@ -75,14 +80,14 @@ void cleanContrller(){
                   onChanged: (value) {
                     // _formKey.currentState!.validate();
                     print("Input Email : $value");
-                    context.read<LoginBloc>().add(EmailEvent(email: value));
+                    context.read<LoginBloc>().add(EmailEvent(email: emailController.text));
                     
                   },
                   
                 controller:emailController  ,
                  hintText: "Enter Email" ,
                  validator: (value){
-                  if ( value.toString().contains("@") && value.isEmpty) {
+                  if (state.email.isEmpty || !state.email.contains("@") ) {
                     return "Please Enter Email";
                   }
                   // if(Validations().isValidEmail(value) ){
@@ -101,12 +106,12 @@ void cleanContrller(){
                BlocBuilder<LoginBloc, LoginInitialStates>(
                 buildWhen: (previous, current) => previous.password != current.password,
                 builder: (context, state) {
-                print("Password state : ${state.password}");
+                
                  return NormalTextfild(
                   obscureText: obscureText ,
                   onChanged: (value) {
-                    print("Input Password : $value");
-                    context.read<LoginBloc>().add(PasswordEvent(password: value));
+                    
+                    context.read<LoginBloc>().add(PasswordEvent(password: passController.text));
                     
                   },
                   suffixIcon: IconButton(onPressed: (){
@@ -138,18 +143,37 @@ void cleanContrller(){
                 listenWhen: (previous, current) =>  previous.postApiStatus != current.postApiStatus,
                 listener: (context, state) {
                 if(state.postApiStatus== PostApiStatus.error){
-                  print("Error Message : ${state.message}");
-                  ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(
-                    SnackBar(content: Text(state.message.toString()))
-                  );
+                  // print("Error Message : ${state.message}");
+                  FlashBarHelper.flashBarErrorMessage(
+                    message:"Error", 
+                    context, 
+                    color: Colors.red,
+                    icon: Icon(Icons.error_outline, color: Colors.white,)
+                    );
+                    
+                  // ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(
+                  //   SnackBar(content: Text(state.message.toString()))
+                  // );
                 }else if(state.postApiStatus == PostApiStatus.success){
-                  print("Success Message : ${state.message}");
-                    ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(
-                    SnackBar(content: Text(state.message.toString()))
-                  );
+                   FlashBarHelper.flashBarErrorMessage(
+                    message:"Successfully Login", 
+                    context, color: Colors.green,
+                    icon: Icon(Icons.done, color: Colors.white,)
+                    );
+                  
+                  // ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(
+                  //   SnackBar(content: Text("Successfully Login"))
+                  // );
+                  cleanContrller();
+                   Navigator.pushNamedAndRemoveUntil(context, RoutesName.loginScreen,  (route) => false); 
+                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
                 } else if (state.postApiStatus == PostApiStatus.loading){
                   ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(
-                    SnackBar(content: Text("Submitting...."))
+
+                    SnackBar(
+                      backgroundColor: Colors.lightBlueAccent.shade700,
+                      duration: Duration(seconds: 2),
+                      content: Text("Submitting...."))
                   );
 
                 }
@@ -157,16 +181,18 @@ void cleanContrller(){
               child: 
              BlocBuilder<LoginBloc, LoginInitialStates>(
               
-              buildWhen: (previous, current) => false,
+              buildWhen: (previous, current) =>  previous.postApiStatus != current.postApiStatus,
               builder: (context, state) {
                return  ButtonWidget(onPressed: () {
-                if (_formKey.currentState!.validate()) {
+                if (_formKey.currentState!.validate()  ) {
                   context.read<LoginBloc>().add(LoginApi());
-                  // _formKey.currentState!.save();
-                  // cleanContrller();
+                    
+                  
+                  
+                  
                 }
               },
-              text: "Login");
+              child:state.postApiStatus == PostApiStatus.loading ? CircularProgressIndicator(): Text("Login"));
              },),
               
               )
